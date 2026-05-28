@@ -283,27 +283,40 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
       <span class="txn-badge" id="detail-badge"></span>
     </div>
     <div class="detail-3col">
-      <!-- LEFT: Agent + Client Link + DotLoop + Notes -->
+      <!-- LEFT: Agent + Title + Lender + Notes -->
       <div>
         <div class="agent-profile-card">
           <div class="card-label" style="margin-bottom:10px;">Agent</div>
           <div id="detail-agent-profile"></div>
         </div>
+        <div class="sidebar-card">
+          <div class="card-label" style="margin-bottom:8px;">Title company</div>
+          <input class="sidebar-input" type="text" id="sb-title-name" placeholder="Company name" style="margin-bottom:6px;" onblur="saveSidebar()">
+          <input class="sidebar-input" type="text" id="sb-title-addr" placeholder="Address" style="margin-bottom:6px;" onblur="saveSidebar()">
+          <input class="sidebar-input" type="text" id="sb-title-city" placeholder="City, State ZIP" style="margin-bottom:6px;" onblur="saveSidebar()">
+          <input class="sidebar-input" type="tel" id="sb-title-phone" placeholder="Phone number" onblur="saveSidebar()">
+        </div>
+        <div class="sidebar-card" id="sb-lender-card">
+          <div class="card-label" style="margin-bottom:8px;">Lender</div>
+          <input class="sidebar-input" type="text" id="sb-lender-agent" placeholder="Lender name" style="margin-bottom:6px;" onblur="saveSidebar()">
+          <input class="sidebar-input" type="text" id="sb-lender-company" placeholder="Company name" style="margin-bottom:6px;" onblur="saveSidebar()">
+          <input class="sidebar-input" type="tel" id="sb-lender-phone" placeholder="Phone number" style="margin-bottom:6px;" onblur="saveSidebar()">
+          <input class="sidebar-input" type="email" id="sb-lender-email" placeholder="Email address" onblur="saveSidebar()">
+        </div>
+        <div class="sidebar-card">
+          <div class="card-label" style="margin-bottom:8px;">Notes</div>
+          <textarea class="contingency-textarea" rows="4" id="sb-contingencies" placeholder="e.g. Sale of home contingency — buyer must sell 123 Main St by June 1. Kick-out clause with 48hr notice..." onblur="saveSidebar()"></textarea>
+        </div>
+      </div>
+
+      <!-- MIDDLE: Client Link + DotLoop + Progress + Steps -->
+      <div>
         <div class="card">
           <div class="card-label">Client link</div>
           <div class="link-box"><span class="link-text" id="detail-link"></span><button class="copy-btn" onclick="copyLink()">Copy</button></div>
           <div style="font-size:12px;color:var(--muted);margin-top:8px;">Share with your client. No login needed.</div>
         </div>
         <div class="card"><div class="card-label">DotLoop</div><div id="dotloop-content"></div></div>
-        <div class="card" id="agent-note-card">
-          <div class="card-label">Message for your client</div>
-          <textarea class="note-textarea" rows="3" id="detail-note" placeholder="e.g. Inspection scheduled for Thursday at 10am."></textarea>
-          <button class="btn btn-primary btn-sm" onclick="saveNote()">Save message</button>
-        </div>
-      </div>
-
-      <!-- MIDDLE: Progress + Steps -->
-      <div>
         <div class="card">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
             <div class="card-label" style="margin-bottom:0;">Progress</div>
@@ -312,6 +325,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
           <div class="txn-progress-wrap" style="height:6px;margin-bottom:0;"><div class="txn-progress-fill" id="detail-progress-bar"></div></div>
         </div>
         <div class="card"><div class="card-label">Steps — check off as you complete them</div><div id="detail-steps"></div></div>
+        <div class="card" id="agent-note-card">
+          <div class="card-label">Message for your client</div>
+          <textarea class="note-textarea" rows="3" id="detail-note" placeholder="e.g. Inspection scheduled for Thursday at 10am."></textarea>
+          <button class="btn btn-primary btn-sm" onclick="saveNote()">Save message</button>
+        </div>
       </div>
 
       <!-- RIGHT: Dates + Title + Lender + Contingencies -->
@@ -377,26 +395,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
           </div>
         </div>
 
-        <div class="sidebar-card">
-          <div class="card-label" style="margin-bottom:8px;">Title company</div>
-          <input class="sidebar-input" type="text" id="sb-title-name" placeholder="Company name" style="margin-bottom:6px;" onblur="saveSidebar()">
-          <input class="sidebar-input" type="text" id="sb-title-addr" placeholder="Address" style="margin-bottom:6px;" onblur="saveSidebar()">
-          <input class="sidebar-input" type="text" id="sb-title-city" placeholder="City, State ZIP" style="margin-bottom:6px;" onblur="saveSidebar()">
-          <input class="sidebar-input" type="tel" id="sb-title-phone" placeholder="Phone number" onblur="saveSidebar()">
-        </div>
-
-        <div class="sidebar-card" id="sb-lender-card">
-          <div class="card-label" style="margin-bottom:8px;">Lender</div>
-          <input class="sidebar-input" type="text" id="sb-lender-agent" placeholder="Lender name" style="margin-bottom:6px;" onblur="saveSidebar()">
-          <input class="sidebar-input" type="text" id="sb-lender-company" placeholder="Company name" style="margin-bottom:6px;" onblur="saveSidebar()">
-          <input class="sidebar-input" type="tel" id="sb-lender-phone" placeholder="Phone number" style="margin-bottom:6px;" onblur="saveSidebar()">
-          <input class="sidebar-input" type="email" id="sb-lender-email" placeholder="Email address" onblur="saveSidebar()">
-        </div>
-
-        <div class="sidebar-card">
-          <div class="card-label" style="margin-bottom:8px;">Contingencies</div>
-          <textarea class="contingency-textarea" rows="4" id="sb-contingencies" placeholder="e.g. Sale of home contingency — buyer must sell 123 Main St by June 1. Kick-out clause with 48hr notice..." onblur="saveSidebar()"></textarea>
-        </div>
       </div>
     </div>
   </div>
