@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RE/MAX Energy — Transaction Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC0000;
+    --red-light: #fff0f0;
+    --red-mid: #e63333;
+    --dark: #111111;
+    --mid: #444444;
+    --muted: #888888;
+    --border: #e5e5e5;
+    --bg: #f9f9f7;
+    --white: #ffffff;
+    --success: #1a7a4a;
+    --success-light: #edf7f2;
+    --warning: #b45309;
+    --warning-light: #fffbeb;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+  #screen-login { align-items: center; justify-content: center; padding: 2rem; background: var(--white); }
+  .login-box { width: 100%; max-width: 380px; }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2.5rem; }
+  .login-logo-mark { width: 36px; height: 36px; background: var(--red); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .login-logo-mark span { color: white; font-weight: 600; font-size: 16px; }
+  .login-logo-text { font-size: 15px; font-weight: 500; color: var(--dark); line-height: 1.2; }
+  .login-logo-text small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .login-box h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .login-box p { font-size: 14px; color: var(--muted); margin-bottom: 2rem; }
+  .agent-select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--white); color: var(--dark); margin-bottom: 12px; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+  .agent-select:focus { outline: none; border-color: var(--red); }
+  .pin-label { font-size: 12px; font-weight: 500; color: var(--mid); margin-bottom: 8px; display: block; }
+  .pin-input { width: 100%; height: 52px; border: 1.5px solid var(--border); border-radius: var(--radius); text-align: center; font-family: 'DM Mono', monospace; font-size: 22px; letter-spacing: 4px; background: var(--white); color: var(--dark); margin-bottom: 12px; }
+  .pin-input:focus { outline: none; border-color: var(--red); }
+  .login-btn { width: 100%; padding: 13px; background: var(--red); color: white; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; }
+  .login-btn:hover { background: var(--red-mid); }
+  .login-error { font-size: 13px; color: var(--red); margin-bottom: 12px; display: none; }
+  .topnav { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--white); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .topnav-logo { display: flex; align-items: center; gap: 8px; }
+  .topnav-logo-mark { width: 28px; height: 28px; background: var(--red); border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+  .topnav-logo-mark span { color: white; font-weight: 600; font-size: 12px; }
+  .topnav-title { font-size: 14px; font-weight: 500; }
+  .topnav-right { display: flex; align-items: center; gap: 12px; }
+  .topnav-user { font-size: 13px; color: var(--muted); }
+  .topnav-logout { font-size: 13px; color: var(--red); cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; padding: 0; }
+  .main { flex: 1; padding: 24px 20px; max-width: 680px; width: 100%; margin: 0 auto; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .section-title { font-size: 18px; font-weight: 600; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .btn { padding: 9px 16px; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
+  .btn-primary { background: var(--red); color: white; }
+  .btn-primary:hover { background: var(--red-mid); }
+  .btn-outline { background: transparent; color: var(--dark); border: 1.5px solid var(--border); }
+  .btn-outline:hover { border-color: var(--dark); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-danger { background: transparent; color: #cc0000; border: 1.5px solid #ffcccc; font-size: 12px; padding: 5px 10px; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 12px; }
+  .txn-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .txn-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .txn-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+  .txn-client { font-size: 15px; font-weight: 600; }
+  .txn-address { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .txn-badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 99px; flex-shrink: 0; }
+  .badge-buyer { background: #e8f0fe; color: #1a56db; }
+  .badge-seller { background: #fef3c7; color: #92400e; }
+  .badge-dual { background: #f3e8ff; color: #6b21a8; }
+  .txn-progress-wrap { background: var(--bg); border-radius: 99px; height: 5px; margin-bottom: 6px; overflow: hidden; }
+  .txn-progress-fill { height: 100%; border-radius: 99px; background: var(--red); }
+  .txn-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .step-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .step-item:last-child { border-bottom: none; }
+  .step-cb { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; margin-top: 1px; transition: all 0.15s; }
+  .step-cb.checked { background: var(--success); border-color: var(--success); }
+  .step-cb.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+  .step-cb:not(.checked):hover { border-color: var(--red); }
+  .step-text { flex: 1; }
+  .step-name { font-size: 14px; color: var(--dark); }
+  .step-name.done { color: var(--muted); text-decoration: line-through; }
+  .step-date { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .detail-back { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; margin-bottom: 20px; background: none; border: none; font-family: 'DM Sans', sans-serif; padding: 0; }
+  .detail-back:hover { color: var(--dark); }
+  .detail-client { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .detail-address { font-size: 14px; color: var(--muted); }
+  .detail-closing { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .link-box { display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; }
+  .link-text { flex: 1; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--mid); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy-btn { font-size: 12px; color: var(--red); cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; font-weight: 500; flex-shrink: 0; padding: 0; }
+  .note-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; resize: none; background: var(--white); color: var(--dark); margin-bottom: 10px; }
+  .note-textarea:focus { outline: none; border-color: var(--red); }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 12px; font-weight: 500; color: var(--mid); margin-bottom: 6px; }
+  .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--white); color: var(--dark); }
+  .form-input:focus { outline: none; border-color: var(--red); }
+  .type-row { display: flex; gap: 8px; }
+  .type-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--white); color: var(--muted); text-align: center; transition: all 0.15s; }
+  .type-btn.selected { border-color: var(--red); color: var(--red); background: var(--red-light); }
+  .admin-tabs { display: flex; gap: 4px; margin-bottom: 20px; background: var(--border); padding: 3px; border-radius: var(--radius); }
+  .admin-tab { flex: 1; padding: 8px; text-align: center; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 8px; border: none; background: transparent; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.15s; }
+  .admin-tab.active { background: var(--white); color: var(--dark); }
+  .agent-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .agent-row:last-child { border-bottom: none; }
+  .agent-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--red-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--red); flex-shrink: 0; }
+  .agent-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .agent-pin { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+  .admin-txn-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .admin-txn-row:last-child { border-bottom: none; }
+  .admin-txn-info { flex: 1; }
+  .admin-txn-client { font-size: 14px; font-weight: 500; }
+  .admin-txn-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .admin-txn-pct { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); }
+  #screen-client { background: var(--white); }
+  .client-header { background: var(--dark); padding: 24px 20px 20px; }
+  .client-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .client-logo-mark { width: 28px; height: 28px; background: var(--red); border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+  .client-logo-mark span { color: white; font-weight: 700; font-size: 12px; }
+  .client-logo-text { font-size: 13px; font-weight: 500; color: white; }
+  .client-property { font-size: 20px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .client-address-text { font-size: 14px; color: rgba(255,255,255,0.6); }
+  .client-body { padding: 20px; max-width: 600px; margin: 0 auto; }
+  .client-progress-card { background: var(--bg); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 16px; }
+  .client-progress-label { font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .client-progress-bar { background: var(--border); border-radius: 99px; height: 8px; margin-bottom: 8px; overflow: hidden; }
+  .client-progress-fill { height: 100%; border-radius: 99px; background: var(--red); }
+  .client-progress-text { font-size: 13px; color: var(--muted); }
+  .next-step-card { background: var(--warning-light); border: 1px solid #fcd34d; border-radius: var(--radius); padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .next-step-label { font-size: 11px; font-weight: 600; color: var(--warning); text-transform: uppercase; letter-spacing: 0.05em; }
+  .next-step-name { font-size: 14px; font-weight: 500; color: var(--dark); margin-top: 1px; }
+  .client-step { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .client-step:last-child { border-bottom: none; }
+  .client-step-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .client-step-dot.done { background: var(--success); border-color: var(--success); }
+  .client-step-dot.done::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
+  .client-step-name { font-size: 14px; }
+  .client-step-name.done { color: var(--muted); text-decoration: line-through; }
+  .client-agent-card { background: var(--bg); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .client-agent-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--red); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: white; flex-shrink: 0; }
+  .client-agent-label { font-size: 11px; color: var(--muted); }
+  .client-agent-name { font-size: 14px; font-weight: 600; }
+  .client-note-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: var(--radius); padding: 12px 14px; margin-top: 12px; font-size: 14px; color: var(--mid); }
+  .client-closing { text-align: center; padding: 20px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .client-closing-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .client-closing-date { font-size: 24px; font-weight: 600; }
+  .dotloop-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #1a56db; color: white; border-radius: var(--radius); font-size: 13px; font-weight: 500; text-decoration: none; margin-top: 8px; }
+  .dotloop-btn:hover { background: #1447c0; }
+  .empty { text-align: center; padding: 48px 20px; color: var(--muted); }
+  .empty-icon { font-size: 32px; margin-bottom: 12px; }
+  .empty p { font-size: 14px; margin-bottom: 16px; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 10px 20px; border-radius: 99px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: var(--radius-lg); padding: 24px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
+  .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-actions .btn { flex: 1; }
+  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 14px; color: var(--muted); flex-direction: column; gap: 12px; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .saving-indicator { font-size: 12px; color: var(--muted); margin-left: 8px; }
+</style>
+</head>
+<body>
+
+<div id="screen-loading" class="screen active">
+  <div class="loading"><div class="spinner"></div>Loading...</div>
+</div>
+
+<div id="screen-login" class="screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-mark"><span>R</span></div>
+      <div class="login-logo-text">RE/MAX Energy Real Estate<small>Transaction Portal</small></div>
+    </div>
+    <h1>Welcome back</h1>
+    <p>Select your name and enter your PIN to continue.</p>
+    <select class="agent-select" id="login-select">
+      <option value="">Select your name...</option>
+      <option value="admin">-- Admin --</option>
+    </select>
+    <label class="pin-label">4-digit PIN</label>
+    <input class="pin-input" type="password" inputmode="numeric" maxlength="4" id="pin-input" placeholder="••••" autocomplete="off">
+    <div class="login-error" id="login-error">Incorrect PIN. Try again.</div>
+    <button class="login-btn" onclick="doLogin()">Sign in</button>
+  </div>
+</div>
+
+<div id="screen-agent" class="screen">
+  <div class="topnav">
+    <div class="topnav-logo"><div class="topnav-logo-mark"><span>R</span></div><div class="topnav-title">Transaction Portal</div></div>
+    <div class="topnav-right"><span class="topnav-user" id="nav-agent-name"></span><button class="topnav-logout" onclick="doLogout()">Sign out</button></div>
+  </div>
+  <div class="main">
+    <div class="section-header">
+      <div><div class="section-title">My Transactions</div><div class="section-sub" id="agent-txn-count"></div></div>
+      <button class="btn btn-primary" onclick="openNewTxn()">+ New</button>
+    </div>
+    <div id="agent-txn-list"></div>
+  </div>
+</div>
+
+<div id="screen-detail" class="screen">
+  <div class="topnav">
+    <div class="topnav-logo"><div class="topnav-logo-mark"><span>R</span></div><div class="topnav-title">Transaction Portal</div></div>
+    <div class="topnav-right"><span class="topnav-user" id="nav-detail-name"></span><button class="topnav-logout" onclick="doLogout()">Sign out</button></div>
+  </div>
+  <div class="main">
+    <button class="detail-back" onclick="backToDash()">← Back to my transactions</button>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px;">
+      <div>
+        <div class="detail-client" id="detail-client"></div>
+        <div class="detail-address" id="detail-address"></div>
+        <div class="detail-closing" id="detail-closing"></div>
+      </div>
+      <span class="txn-badge" id="detail-badge"></span>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Client link — share this with your client</div>
+      <div class="link-box"><span class="link-text" id="detail-link"></span><button class="copy-btn" onclick="copyLink()">Copy</button></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;">Your client opens this link to see their progress. No login needed.</div>
+    </div>
+
+    <div class="card" id="dotloop-card">
+      <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">DotLoop</div>
+      <div id="dotloop-content"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Progress</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="detail-progress-label"></div>
+      <div class="txn-progress-wrap" style="height:6px;margin-bottom:0;"><div class="txn-progress-fill" id="detail-progress-bar"></div></div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Steps — check off as you complete them</div>
+      <div id="detail-steps"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Message for your client (optional)</div>
+      <textarea class="note-textarea" rows="3" id="detail-note" placeholder="e.g. Inspection scheduled for Thursday at 10am. Report will be ready by Friday."></textarea>
+      <button class="btn btn-primary btn-sm" onclick="saveNote()">Save message</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-admin" class="screen">
+  <div class="topnav">
+    <div class="topnav-logo"><div class="topnav-logo-mark"><span>R</span></div><div class="topnav-title">Transaction Portal</div></div>
+    <div class="topnav-right"><span class="topnav-user">Admin</span><button class="topnav-logout" onclick="doLogout()">Sign out</button></div>
+  </div>
+  <div class="main">
+    <div class="section-header" style="margin-bottom:16px;"><div class="section-title">Admin Dashboard</div></div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="adminTab('transactions')">All Transactions</button>
+      <button class="admin-tab" onclick="adminTab('agents')">Agents & PINs</button>
+    </div>
+    <div id="admin-transactions"></div>
+    <div id="admin-agents" style="display:none;"></div>
+  </div>
+</div>
+
+<div id="screen-client" class="screen">
+  <div class="client-header">
+    <div class="client-logo"><div class="client-logo-mark"><span>R</span></div><div class="client-logo-text">RE/MAX Energy Real Estate</div></div>
+    <div class="client-property" id="client-property"></div>
+    <div class="client-address-text" id="client-address"></div>
+  </div>
+  <div class="client-body">
+    <div class="client-progress-card">
+      <div class="client-progress-label">Overall progress</div>
+      <div class="client-progress-bar"><div class="client-progress-fill" id="client-progress-fill"></div></div>
+      <div class="client-progress-text" id="client-progress-text"></div>
+    </div>
+    <div class="next-step-card" id="client-next-step">
+      <div style="font-size:16px;">⏳</div>
+      <div><div class="next-step-label">Up next</div><div class="next-step-name" id="client-next-name"></div></div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Your transaction steps</div>
+      <div id="client-steps"></div>
+    </div>
+    <div class="client-note-box" id="client-note-box" style="display:none;"></div>
+    <div class="client-agent-card">
+      <div class="client-agent-avatar" id="client-agent-avatar"></div>
+      <div><div class="client-agent-label">Your agent</div><div class="client-agent-name" id="client-agent-name"></div></div>
+    </div>
+    <div class="client-closing">
+      <div class="client-closing-label">Estimated closing date</div>
+      <div class="client-closing-date" id="client-closing-date"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-new-txn">
+  <div class="modal">
+    <div class="modal-title">New Transaction</div>
+    <div class="form-group"><label class="form-label">Client name(s)</label><input class="form-input" type="text" id="new-client" placeholder="e.g. Sarah & Tom Weston"></div>
+    <div class="form-group"><label class="form-label">Property address</label><input class="form-input" type="text" id="new-address" placeholder="e.g. 1428 Elmhurst Dr, Edmond OK"></div>
+    <div class="form-group"><label class="form-label">Estimated closing date</label><input class="form-input" type="date" id="new-closing"></div>
+    <div class="form-group"><label class="form-label">DotLoop link (optional)</label><input class="form-input" type="url" id="new-dotloop" placeholder="https://dotloop.com/m/..."></div>
+    <div class="form-group">
+      <label class="form-label">Transaction type</label>
+      <div class="type-row">
+        <button class="type-btn selected" onclick="selectType('buyer')" id="type-buyer">Buyer</button>
+        <button class="type-btn" onclick="selectType('seller')" id="type-seller">Seller</button>
+        <button class="type-btn" onclick="selectType('dual')" id="type-dual">Both sides</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-txn')">Cancel</button>
+      <button class="btn btn-primary" onclick="createTransaction()">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDY_7NmBPOSNp8Ph71WhATMOdPVQ8f3avQ",
+  authDomain: "remaxenergy-portal.firebaseapp.com",
+  projectId: "remaxenergy-portal",
+  storageBucket: "remaxenergy-portal.firebasestorage.app",
+  messagingSenderId: "667635306257",
+  appId: "1:667635306257:web:1356146453ad3bfcc9c6b0"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const ADMIN_PIN = '4258';
+
+const BUYER_STEPS = [
+  'Offer submitted','Offer accepted','Earnest money deposited',
+  'Inspection scheduled','Inspection completed','Repair request submitted',
+  'Repair negotiations complete','Loan application submitted',
+  'Appraisal ordered','Appraisal received','Title search ordered',
+  'Title search clear','Homeowners insurance obtained',
+  'Clear to close received','Closing disclosure reviewed',
+  'Final walkthrough complete','Closing day — keys in hand'
+];
+
+const SELLER_STEPS = [
+  'Listing agreement signed','Property photos complete','Listed on MLS',
+  'Offer received','Offer accepted','Buyer inspection scheduled',
+  'Buyer inspection complete','Repair negotiations complete',
+  'Buyer appraisal ordered','Appraisal received','Title search ordered',
+  'Title search clear','Buyer clear to close','Closing disclosure reviewed',
+  'Final walkthrough complete','Closing day — funds received'
+];
+
+const AGENTS = [
+  { name: 'Brian Woodward', pin: '1001' },
+  { name: 'Terri Pyle', pin: '1002' },
+  { name: 'Brian Orr', pin: '1003' },
+  { name: 'Ryan Lerma', pin: '1004' },
+  { name: 'Donnie Woodard', pin: '1005' },
+  { name: 'Jamie Daubenspeck', pin: '1006' },
+  { name: 'Priscilla Hill', pin: '1007' },
+  { name: 'Tyler Clark', pin: '1008' },
+  { name: 'Bri Doran', pin: '1009' },
+  { name: 'Leah Seely', pin: '1010' },
+  { name: 'Cyra Shelton', pin: '1011' },
+  { name: 'Krystin Shelton', pin: '1012' },
+  { name: 'Shellie Kelley', pin: '1013' },
+  { name: 'Braydon Keneda', pin: '1014' },
+  { name: 'Chelsey Jasper', pin: '1015' },
+  { name: 'Carrie Lehi', pin: '1016' },
+  { name: 'Ivan Auld', pin: '1017' },
+  { name: 'Tesia Brzozowske', pin: '1018' },
+  { name: 'Caleb Dobbs', pin: '1019' },
+  { name: 'Tyler Woodward', pin: '1020' },
+  { name: 'Ashtin Baird', pin: '1021' },
+];
+
+let currentUser = null;
+let currentTxnId = null;
+let newTxnType = 'buyer';
+let liveTransactions = [];
+let unsubscribe = null;
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d + 'T12:00:00');
+  return dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function getSteps(t) {
+  if (t.type === 'buyer') return t.buyerSteps || [];
+  if (t.type === 'seller') return t.sellerSteps || [];
+  return [...(t.buyerSteps || []), ...(t.sellerSteps || [])];
+}
+
+function initLogin() {
+  const sel = document.getElementById('login-select');
+  AGENTS.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.name;
+    opt.textContent = a.name;
+    sel.appendChild(opt);
+  });
+  document.getElementById('pin-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+}
+
+window.doLogin = function() {
+  const who = document.getElementById('login-select').value;
+  const pin = document.getElementById('pin-input').value.trim();
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  if (!who) { err.textContent = 'Please select your name.'; err.style.display = 'block'; return; }
+  if (!pin) { err.textContent = 'Please enter your PIN.'; err.style.display = 'block'; return; }
+  if (who === 'admin') {
+    if (pin !== ADMIN_PIN) { err.style.display = 'block'; return; }
+    currentUser = { name: 'Admin', isAdmin: true };
+    document.getElementById('pin-input').value = '';
+    show('screen-admin');
+    loadAdminTransactions();
+    return;
+  }
+  const agent = AGENTS.find(a => a.name === who);
+  if (!agent || pin !== agent.pin) { err.style.display = 'block'; return; }
+  currentUser = { name: agent.name, isAdmin: false };
+  document.getElementById('pin-input').value = '';
+  document.getElementById('nav-agent-name').textContent = agent.name;
+  show('screen-agent');
+  loadAgentTransactions(agent.name);
+}
+
+window.doLogout = function() {
+  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  currentUser = null;
+  currentTxnId = null;
+  liveTransactions = [];
+  document.getElementById('login-select').value = '';
+  document.getElementById('pin-input').value = '';
+  document.getElementById('login-error').style.display = 'none';
+  show('screen-login');
+}
+
+function loadAgentTransactions(agentName) {
+  if (unsubscribe) unsubscribe();
+  const q = query(collection(db, 'transactions'), where('agent', '==', agentName));
+  unsubscribe = onSnapshot(q, snap => {
+    liveTransactions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAgentDash();
+    if (currentTxnId) {
+      const t = liveTransactions.find(x => x.id === currentTxnId);
+      if (t) renderDetailSteps(t);
+    }
+  });
+}
+
+function loadAdminTransactions() {
+  if (unsubscribe) unsubscribe();
+  unsubscribe = onSnapshot(collection(db, 'transactions'), snap => {
+    liveTransactions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAdminTxns();
+  });
+}
+
+function renderAgentDash() {
+  const myTxns = liveTransactions;
+  document.getElementById('agent-txn-count').textContent = myTxns.length === 0 ? 'No active transactions' : myTxns.length + ' active transaction' + (myTxns.length !== 1 ? 's' : '');
+  const list = document.getElementById('agent-txn-list');
+  if (myTxns.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><p>No transactions yet. Tap + New to add your first one.</p></div>`;
+    return;
+  }
+  const sorted = [...myTxns].sort((a,b) => new Date(a.closing) - new Date(b.closing));
+  list.innerHTML = sorted.map(t => {
+    const steps = getSteps(t);
+    const done = steps.filter(s => s.done).length;
+    const pct = steps.length ? Math.round((done / steps.length) * 100) : 0;
+    const badgeClass = t.type === 'buyer' ? 'badge-buyer' : t.type === 'seller' ? 'badge-seller' : 'badge-dual';
+    const badgeLabel = t.type === 'buyer' ? 'Buyer' : t.type === 'seller' ? 'Seller' : 'Both sides';
+    return `<div class="txn-card" onclick="openDetail('${t.id}')">
+      <div class="txn-card-top">
+        <div><div class="txn-client">${t.client}</div><div class="txn-address">${t.address}</div></div>
+        <span class="txn-badge ${badgeClass}">${badgeLabel}</span>
+      </div>
+      <div class="txn-progress-wrap"><div class="txn-progress-fill" style="width:${pct}%"></div></div>
+      <div class="txn-meta"><span>${done} of ${steps.length} steps done</span><span>Closing ${formatDate(t.closing)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+window.openDetail = function(id) {
+  const t = liveTransactions.find(x => x.id === id);
+  if (!t) return;
+  currentTxnId = id;
+  document.getElementById('nav-detail-name').textContent = currentUser.name;
+  document.getElementById('detail-client').textContent = t.client;
+  document.getElementById('detail-address').textContent = t.address;
+  document.getElementById('detail-closing').textContent = 'Closing: ' + formatDate(t.closing);
+  const badge = document.getElementById('detail-badge');
+  badge.textContent = t.type === 'buyer' ? 'Buyer' : t.type === 'seller' ? 'Seller' : 'Both sides';
+  badge.className = 'txn-badge ' + (t.type === 'buyer' ? 'badge-buyer' : t.type === 'seller' ? 'badge-seller' : 'badge-dual');
+  const baseUrl = window.location.href.split('?')[0];
+  document.getElementById('detail-link').textContent = baseUrl + '?client=' + id;
+  const dlContent = document.getElementById('dotloop-content');
+  if (t.dotloop) {
+    dlContent.innerHTML = `<a class="dotloop-btn" href="${t.dotloop}" target="_blank">Open in DotLoop →</a>`;
+  } else {
+    dlContent.innerHTML = `<div style="font-size:13px;color:var(--muted);">No DotLoop link added. You can add one when creating the transaction.</div>`;
+  }
+  renderDetailSteps(t);
+  document.getElementById('detail-note').value = t.note || '';
+  show('screen-detail');
+}
+
+function renderDetailSteps(t) {
+  const allSteps = getSteps(t);
+  const done = allSteps.filter(s => s.done).length;
+  const pct = allSteps.length ? Math.round((done / allSteps.length) * 100) : 0;
+  document.getElementById('detail-progress-label').textContent = done + ' of ' + allSteps.length + ' steps complete — ' + pct + '%';
+  document.getElementById('detail-progress-bar').style.width = pct + '%';
+  const container = document.getElementById('detail-steps');
+  let html = '';
+  if (t.type === 'dual') {
+    html += `<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;padding:6px 0 4px;">Buyer side</div>`;
+    html += (t.buyerSteps || []).map((s, i) => stepHTML(s, i, 'buyer')).join('');
+    html += `<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;padding:14px 0 4px;">Seller side</div>`;
+    html += (t.sellerSteps || []).map((s, i) => stepHTML(s, i, 'seller')).join('');
+  } else {
+    const key = t.type + 'Steps';
+    html += (t[key] || []).map((s, i) => stepHTML(s, i, t.type)).join('');
+  }
+  container.innerHTML = html;
+}
+
+function stepHTML(s, i, side) {
+  return `<div class="step-item">
+    <div class="step-cb ${s.done ? 'checked' : ''}" onclick="toggleStep('${side}',${i})"></div>
+    <div class="step-text">
+      <div class="step-name ${s.done ? 'done' : ''}">${s.name}</div>
+      ${s.done && s.date ? `<div class="step-date">Completed ${s.date}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+window.toggleStep = async function(side, i) {
+  const t = liveTransactions.find(x => x.id === currentTxnId);
+  if (!t) return;
+  const key = side + 'Steps';
+  const steps = [...(t[key] || [])];
+  steps[i] = {
+    ...steps[i],
+    done: !steps[i].done,
+    date: !steps[i].done ? new Date().toLocaleDateString('en-US', {month:'short',day:'numeric'}) : ''
+  };
+  try {
+    await updateDoc(doc(db, 'transactions', currentTxnId), { [key]: steps });
+  } catch(e) { showToast('Error saving — check connection'); }
+}
+
+window.saveNote = async function() {
+  const note = document.getElementById('detail-note').value.trim();
+  try {
+    await updateDoc(doc(db, 'transactions', currentTxnId), { note });
+    showToast('Message saved');
+  } catch(e) { showToast('Error saving'); }
+}
+
+window.copyLink = function() {
+  const link = document.getElementById('detail-link').textContent;
+  navigator.clipboard.writeText(link).then(() => showToast('Link copied')).catch(() => showToast('Copy failed'));
+}
+
+window.backToDash = function() {
+  currentTxnId = null;
+  show('screen-agent');
+}
+
+window.openNewTxn = function() {
+  newTxnType = 'buyer';
+  ['buyer','seller','dual'].forEach(t => document.getElementById('type-'+t).classList.toggle('selected', t === 'buyer'));
+  ['new-client','new-address','new-dotloop'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('new-closing').value = '';
+  document.getElementById('modal-new-txn').classList.add('open');
+}
+
+window.selectType = function(t) {
+  newTxnType = t;
+  ['buyer','seller','dual'].forEach(x => document.getElementById('type-'+x).classList.toggle('selected', x === t));
+}
+
+window.createTransaction = async function() {
+  const client = document.getElementById('new-client').value.trim();
+  const address = document.getElementById('new-address').value.trim();
+  const closing = document.getElementById('new-closing').value;
+  const dotloop = document.getElementById('new-dotloop').value.trim();
+  if (!client || !address || !closing) { showToast('Please fill in all fields'); return; }
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  const txn = {
+    client, address, closing, dotloop,
+    type: newTxnType,
+    agent: currentUser.name,
+    note: '',
+    buyerSteps: BUYER_STEPS.map(n => ({ name: n, done: false, date: '' })),
+    sellerSteps: SELLER_STEPS.map(n => ({ name: n, done: false, date: '' })),
+    created: new Date().toISOString(),
+  };
+  try {
+    await setDoc(doc(db, 'transactions', id), txn);
+    closeModal('modal-new-txn');
+    showToast('Transaction created');
+  } catch(e) { showToast('Error creating transaction'); }
+}
+
+window.closeModal = function(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+window.adminTab = function(tab) {
+  document.querySelectorAll('.admin-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='transactions')||(i===1&&tab==='agents')));
+  document.getElementById('admin-transactions').style.display = tab === 'transactions' ? 'block' : 'none';
+  document.getElementById('admin-agents').style.display = tab === 'agents' ? 'block' : 'none';
+}
+
+function renderAdminTxns() {
+  const el = document.getElementById('admin-transactions');
+  if (liveTransactions.length === 0) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><p>No transactions yet. Agents will see them here once they create them.</p></div>`;
+    return;
+  }
+  const sorted = [...liveTransactions].sort((a,b) => new Date(a.closing)-new Date(b.closing));
+  el.innerHTML = `<div class="card">${sorted.map(t => {
+    const steps = getSteps(t);
+    const done = steps.filter(s => s.done).length;
+    const pct = steps.length ? Math.round((done / steps.length) * 100) : 0;
+    const badgeClass = t.type === 'buyer' ? 'badge-buyer' : t.type === 'seller' ? 'badge-seller' : 'badge-dual';
+    const badgeLabel = t.type === 'buyer' ? 'Buyer' : t.type === 'seller' ? 'Seller' : 'Both';
+    return `<div class="admin-txn-row">
+      <div class="admin-txn-info">
+        <div class="admin-txn-client">${t.client} <span class="txn-badge ${badgeClass}" style="margin-left:6px;">${badgeLabel}</span></div>
+        <div class="admin-txn-meta">${t.agent} &bull; ${t.address} &bull; Closing ${formatDate(t.closing)}</div>
+      </div>
+      <div class="admin-txn-pct">${pct}%</div>
+    </div>`;
+  }).join('')}</div>`;
+  renderAdminAgents();
+}
+
+function renderAdminAgents() {
+  const el = document.getElementById('admin-agents');
+  el.innerHTML = `<div class="card">${AGENTS.map(a => {
+    const count = liveTransactions.filter(t => t.agent === a.name).length;
+    const initials = a.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+    return `<div class="agent-row">
+      <div class="agent-avatar">${initials}</div>
+      <div class="agent-name">${a.name}</div>
+      <div class="agent-pin" style="margin-right:8px;">${count} deal${count!==1?'s':''}</div>
+      <div class="agent-pin">PIN: ${a.pin}</div>
+    </div>`;
+  }).join('')}</div>
+  <div style="font-size:12px;color:var(--muted);margin-top:12px;padding:0 4px;">Share each agent's PIN with them privately. They use it to log in.</div>`;
+}
+
+async function renderClientView(id) {
+  show('screen-loading');
+  try {
+    const snap = await getDoc(doc(db, 'transactions', id));
+    if (!snap.exists()) {
+      document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;flex-direction:column;gap:12px;"><div style="font-size:48px;">🏠</div><div>Transaction not found.</div></div>`;
+      return;
+    }
+    const t = { id: snap.id, ...snap.data() };
+    document.getElementById('client-property').textContent = t.client + (t.type === 'buyer' ? ' — Home Purchase' : t.type === 'seller' ? ' — Home Sale' : ' — Transaction');
+    document.getElementById('client-address').textContent = t.address;
+    const steps = getSteps(t);
+    const done = steps.filter(s => s.done).length;
+    const pct = steps.length ? Math.round((done / steps.length) * 100) : 0;
+    document.getElementById('client-progress-fill').style.width = pct + '%';
+    document.getElementById('client-progress-text').textContent = done + ' of ' + steps.length + ' steps complete';
+    const next = steps.find(s => !s.done);
+    if (next) {
+      document.getElementById('client-next-name').textContent = next.name;
+    } else {
+      document.getElementById('client-next-step').innerHTML = `<div style="font-size:16px;">🎉</div><div><div class="next-step-label">Status</div><div class="next-step-name">All steps complete — congratulations!</div></div>`;
+    }
+    document.getElementById('client-steps').innerHTML = steps.map(s => `<div class="client-step">
+      <div class="client-step-dot ${s.done?'done':''}"></div>
+      <div class="client-step-name ${s.done?'done':''}">${s.name}</div>
+    </div>`).join('');
+    if (t.note) {
+      const nb = document.getElementById('client-note-box');
+      nb.style.display = 'block';
+      nb.innerHTML = `<div style="font-size:11px;font-weight:600;color:#0369a1;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Message from your agent</div>${t.note}`;
+    }
+    const initials = t.agent.split(' ').map(w=>w[0]).join('').slice(0,2);
+    document.getElementById('client-agent-avatar').textContent = initials;
+    document.getElementById('client-agent-name').textContent = t.agent;
+    document.getElementById('client-closing-date').textContent = formatDate(t.closing);
+    show('screen-client');
+  } catch(e) {
+    document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;">Error loading transaction.</div>`;
+  }
+}
+
+function init() {
+  initLogin();
+  const params = new URLSearchParams(location.search);
+  const clientId = params.get('client');
+  if (clientId) { renderClientView(clientId); return; }
+  show('screen-login');
+}
+
+init();
+</script>
+</body>
+</html>
