@@ -578,7 +578,55 @@ function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.re
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
 function ini(name){return name.split(" ").map(w=>w[0]).join("").slice(0,2);}
 function genToken(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+// US Federal Holidays (approximate - major ones)
+function isFederalHoliday(d){
+  const m=d.getMonth()+1,day=d.getDate(),dow=d.getDay(),y=d.getFullYear();
+  // New Year's Day
+  if(m===1&&day===1)return true;
+  // MLK Day - 3rd Monday January
+  if(m===1&&dow===1&&day>=15&&day<=21)return true;
+  // Presidents Day - 3rd Monday February
+  if(m===2&&dow===1&&day>=15&&day<=21)return true;
+  // Memorial Day - last Monday May
+  if(m===5&&dow===1&&day>=25)return true;
+  // Juneteenth
+  if(m===6&&day===19)return true;
+  // Independence Day
+  if(m===7&&day===4)return true;
+  // Labor Day - 1st Monday September
+  if(m===9&&dow===1&&day<=7)return true;
+  // Columbus Day - 2nd Monday October
+  if(m===10&&dow===1&&day>=8&&day<=14)return true;
+  // Veterans Day
+  if(m===11&&day===11)return true;
+  // Thanksgiving - 4th Thursday November
+  if(m===11&&dow===4&&day>=22&&day<=28)return true;
+  // Christmas
+  if(m===12&&day===25)return true;
+  return false;
+}
+
+function isBusinessDay(ds){
+  const d=new Date(ds+"T12:00:00");
+  const dow=d.getDay();
+  if(dow===0||dow===6)return false; // weekend
+  if(isFederalHoliday(d))return false;
+  return true;
+}
+
 function addDays(ds,n){if(!ds)return null;const d=new Date(ds+"T12:00:00");d.setDate(d.getDate()+n);return d.toISOString().split("T")[0];}
+
+function addCalendarDaysRollToBusinessDay(ds,n){
+  // Add n calendar days, then roll forward to next business day if lands on weekend/holiday
+  if(!ds)return null;
+  const d=new Date(ds+"T12:00:00");
+  d.setDate(d.getDate()+n);
+  // Roll forward if weekend or holiday
+  while(d.getDay()===0||d.getDay()===6||isFederalHoliday(d)){
+    d.setDate(d.getDate()+1);
+  }
+  return d.toISOString().split("T")[0];
+}
 function fmtDate(d){if(!d)return"—";const dt=new Date(d+"T12:00:00");return dt.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});}
 function fmtDateSh(d){if(!d)return"—";const dt=new Date(d+"T12:00:00");return dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
 function fmtTime(t){if(!t)return"";const[h,m]=t.split(":");const hr=parseInt(h);return(hr%12||12)+":"+m+(hr>=12?" PM":" AM");}
@@ -687,19 +735,84 @@ show("screen-detail");};
 
 function updateClosingDisplay(){const d=document.getElementById("sb-closing").value;const ti=document.getElementById("sb-closing-time").value;const el=document.getElementById("sb-closing-display");if(d){el.innerHTML=`<div class="closing-box-date">${fmtDate(d)}</div>${ti?`<div class="closing-box-time">${fmtTime(ti)}</div>`:""}`;} else{el.innerHTML=`<div style="font-size:13px;color:var(--muted);">No closing date set</div>`;}}
 
-window.recalcDates=function(){const acceptance=document.getElementById("sb-acceptance").value;const trdOverride=document.getElementById("sb-trd").value;const trd=trdOverride||addDays(acceptance,3);const inspDays=parseInt(document.getElementById("sb-insp-days").value)||10;const trrDays=parseInt(document.getElementById("sb-trr-days").value)||7;const appraisalDays=parseInt(document.getElementById("sb-appraisal-days").value)||10;
-const trdBadge=document.getElementById("trd-badge");const trdNote=document.getElementById("trd-note");
-if(trdOverride){trdBadge.textContent="override";trdBadge.className="override-badge";trdNote.textContent="";}
-else if(acceptance){trdBadge.textContent="auto";trdBadge.className="auto-badge";trdNote.textContent=`Blank = acceptance + 3 days (${fmtDateSh(trd)})`;}
-else{trdBadge.textContent="auto";trdBadge.className="auto-badge";trdNote.textContent="Enter acceptance date to auto-calculate";}
-const inspBegin=addDays(trd,1);const inspEnd=addDays(inspBegin,inspDays);const trrDue=addDays(inspEnd,1);const trrNegEnd=addDays(trrDue,trrDays);const hoaDue=addDays(trd,5);const appraisalDue=addDays(trd,appraisalDays);
-// Only auto-fill if field is empty or was previously auto-calculated
-const fields=[["sb-insp-begin",inspBegin],["sb-insp-end",inspEnd],["sb-trr",trrDue],["sb-trr-neg",trrNegEnd],["sb-hoa",hoaDue],["sb-appraisal",appraisalDue]];
-fields.forEach(([id,val])=>{const el=document.getElementById(id);if(!el.value&&val)el.value=val;});};
+window.recalcDates=function(){
+  const acceptance=document.getElementById("sb-acceptance").value;
+  const trdOverride=document.getElementById("sb-trd").value;
+  const inspDays=parseInt(document.getElementById("sb-insp-days").value)||10;
+  const trrDays=parseInt(document.getElementById("sb-trr-days").value)||7;
+  const appraisalDays=parseInt(document.getElementById("sb-appraisal-days").value)||10;
+
+  // TRD: acceptance + 3 calendar days, rolled to next business day if weekend/holiday
+  const trdAuto=addCalendarDaysRollToBusinessDay(acceptance,3);
+  const trd=trdOverride||trdAuto;
+
+  // Earnest money: acceptance + 3 calendar days, rolled to next business day
+  const earnestAuto=addCalendarDaysRollToBusinessDay(acceptance,3);
+
+  // Inspection: begins day after TRD (Day 1 = day after TRD), ends TRD + 10 days
+  const inspBegin=addDays(trd,1);
+  const inspEnd=addDays(trd,inspDays); // TRD + 10 days (day after TRD = Day 1, so Day 10 = TRD+10)
+
+  // TRR: due within 24hrs after inspection period expires = inspection end + 1 day
+  const trrDue=addDays(inspEnd,1);
+
+  // TRR negotiation ends: TRR due + 7 days
+  const trrNegEnd=addDays(trrDue,trrDays);
+
+  // HOA CC&Rs: TRD + 5 days
+  const hoaDue=addDays(trd,5);
+
+  // Loan application: TRD + 5 days (FHA/VA/Conv/USDA)
+  const loanAppDue=addDays(trd,5);
+
+  // Conditional approval: TRD + 10 days
+  const condApprovalDue=addDays(trd,appraisalDays);
+
+  // Update TRD badge and note
+  const trdBadge=document.getElementById("trd-badge");
+  const trdNote=document.getElementById("trd-note");
+  if(trdOverride){
+    trdBadge.textContent="override";trdBadge.className="override-badge";trdNote.textContent="";
+    // Show the override date prominently
+    if(document.getElementById("sb-trd")) document.getElementById("sb-trd").style.borderColor="var(--warning)";
+  } else if(acceptance){
+    trdBadge.textContent="auto";trdBadge.className="auto-badge";
+    trdNote.textContent="Auto: acceptance + 3 days"+( trdAuto?(" = "+fmtDateSh(trdAuto)):"")+(trdAuto!==addDays(acceptance,3)?" (rolled past weekend/holiday)":"");
+    if(document.getElementById("sb-trd")) document.getElementById("sb-trd").style.borderColor="";
+  } else {
+    trdBadge.textContent="auto";trdBadge.className="auto-badge";
+    trdNote.textContent="Enter acceptance date — all dates will auto-calculate";
+    if(document.getElementById("sb-trd")) document.getElementById("sb-trd").style.borderColor="";
+  }
+
+  // Auto-fill earnest money if blank
+  const emField=document.getElementById("sb-earnest");
+  if(emField&&!emField.value&&earnestAuto) emField.value=earnestAuto;
+
+  // Auto-fill all calculated date fields if blank (manual override preserved)
+  const fields=[
+    ["sb-insp-begin",inspBegin],
+    ["sb-insp-end",inspEnd],
+    ["sb-trr",trrDue],
+    ["sb-trr-neg",trrNegEnd],
+    ["sb-hoa",hoaDue],
+    ["sb-appraisal",condApprovalDue]
+  ];
+  fields.forEach(([id,val])=>{
+    const el=document.getElementById(id);
+    if(el&&!el.value&&val) el.value=val;
+  });
+
+  // Update TRD display field to show auto-calculated value
+  const trdField=document.getElementById("sb-trd");
+  if(trdField&&!trdOverride&&trdAuto){
+    trdField.placeholder=fmtDateSh(trdAuto)+" (auto)";
+  }
+};
 
 window.saveSidebar=async function(){if(!currentTxnId)return;
 updateClosingDisplay();
-const sd={closingTime:document.getElementById("sb-closing-time").value,acceptance:document.getElementById("sb-acceptance").value,trdOverride:document.getElementById("sb-trd").value,inspDays:parseInt(document.getElementById("sb-insp-days").value)||10,trrDays:parseInt(document.getElementById("sb-trr-days").value)||7,appraisalDays:parseInt(document.getElementById("sb-appraisal-days").value)||10,earnest:document.getElementById("sb-earnest").value,inspBegin:document.getElementById("sb-insp-begin").value,inspEnd:document.getElementById("sb-insp-end").value,trrDue:document.getElementById("sb-trr").value,trrNegEnd:document.getElementById("sb-trr-neg").value,hoaDue:document.getElementById("sb-hoa").value,appraisalDue:document.getElementById("sb-appraisal").value,titleName:document.getElementById("sb-title-name").value.trim(),titleAddr:document.getElementById("sb-title-addr").value.trim(),titleCity:document.getElementById("sb-title-city").value.trim(),titlePhone:document.getElementById("sb-title-phone").value.trim(),lenderAgent:document.getElementById("sb-lender-agent").value.trim(),lenderCompany:document.getElementById("sb-lender-company").value.trim(),lenderPhone:document.getElementById("sb-lender-phone").value.trim(),lenderEmail:document.getElementById("sb-lender-email").value.trim(),contingencies:document.getElementById("sb-contingencies").value.trim(),source:document.getElementById("sb-source").value.trim()};
+const sd={closingTime:document.getElementById("sb-closing-time").value,acceptance:document.getElementById("sb-acceptance").value,trdOverride:document.getElementById("sb-trd").value,trd:document.getElementById("sb-trd").value||document.getElementById("sb-acceptance").value?addCalendarDaysRollToBusinessDay(document.getElementById("sb-acceptance").value,3):"",inspDays:parseInt(document.getElementById("sb-insp-days").value)||10,trrDays:parseInt(document.getElementById("sb-trr-days").value)||7,appraisalDays:parseInt(document.getElementById("sb-appraisal-days").value)||10,earnest:document.getElementById("sb-earnest").value,inspBegin:document.getElementById("sb-insp-begin").value,inspEnd:document.getElementById("sb-insp-end").value,trrDue:document.getElementById("sb-trr").value,trrNegEnd:document.getElementById("sb-trr-neg").value,hoaDue:document.getElementById("sb-hoa").value,appraisalDue:document.getElementById("sb-appraisal").value,titleName:document.getElementById("sb-title-name").value.trim(),titleAddr:document.getElementById("sb-title-addr").value.trim(),titleCity:document.getElementById("sb-title-city").value.trim(),titlePhone:document.getElementById("sb-title-phone").value.trim(),lenderAgent:document.getElementById("sb-lender-agent").value.trim(),lenderCompany:document.getElementById("sb-lender-company").value.trim(),lenderPhone:document.getElementById("sb-lender-phone").value.trim(),lenderEmail:document.getElementById("sb-lender-email").value.trim(),contingencies:document.getElementById("sb-contingencies").value.trim(),source:document.getElementById("sb-source").value.trim()};
 const closing=document.getElementById("sb-closing").value;
 try{await updateDoc(doc(db,"transactions",currentTxnId),{closing,sidebarData:sd});showToast("Saved");}catch(e){showToast("Error saving");}};
 
