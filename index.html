@@ -6,7 +6,34 @@
 <title>RE/MAX Energy — Transaction Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--red:#CC0000;--red-light:#fdf0f0;--red-mid:#e63333;--dark:#1a1a1a;--mid:#3d3d3d;--muted:#7a7a7a;--border:#e0d9d0;--bg:#faf6f0;--white:#fffefb;--success:#1a7a4a;--success-light:#edf7f2;--warning:#b45309;--warning-light:#fffbeb;--danger:#b91c1c;--danger-light:#fef2f2;--info:#0369a1;--info-light:#f0f9ff;--radius:10px;--radius-lg:16px;}
+:root{
+  /* RE/MAX Brand Colors */
+  --red:#FF1200;           /* RE/MAX Primary Red */
+  --red-dark:#AA1120;      /* Bridge Red */
+  --red-darker:#660000;    /* Dark Red */
+  --red-light:#fdf0f0;
+  --red-mid:#e63333;
+  --blue:#0043FF;          /* RE/MAX Primary Blue */
+  --blue-dark:#0C2749;     /* Bridge Blue */
+  --blue-darker:#000e35;   /* Dark Blue */
+  --sky:#A3D4F2;           /* Sky Blue accent */
+  --dark:#232323;          /* Dark Charcoal Gray */
+  --mid:#3d3d3d;
+  --muted:#7a7a7a;
+  --border:#e0d9d0;
+  --bg:#f7f5ee;            /* RE/MAX Cream */
+  --white:#FFFFFF;
+  --success:#1a7a4a;
+  --success-light:#edf7f2;
+  --warning:#b45309;
+  --warning-light:#fffbeb;
+  --danger:#AA1120;        /* Bridge Red for danger */
+  --danger-light:#fdf0f0;
+  --info:#0C2749;          /* Bridge Blue for info */
+  --info-light:#eef4fb;
+  --radius:10px;
+  --radius-lg:16px;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
 .screen{display:none;min-height:100vh;}
@@ -24,7 +51,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .pin-label{font-size:12px;font-weight:500;color:var(--mid);margin-bottom:8px;display:block;}
 .pin-input{width:100%;height:52px;border:1.5px solid var(--border);border-radius:var(--radius);text-align:center;font-family:"DM Mono",monospace;font-size:22px;letter-spacing:4px;background:var(--white);color:var(--dark);margin-bottom:12px;}
 .pin-input:focus{outline:none;border-color:var(--red);}
-.login-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:var(--radius);font-family:"DM Sans",sans-serif;font-size:15px;font-weight:500;cursor:pointer;}
+.login-btn{width:100%;padding:13px;background:var(--red);color:white;border:none;border-radius:var(--radius);font-family:"DM Sans",sans-serif;font-size:15px;font-weight:500;cursor:pointer;letter-spacing:.02em;}
 .login-btn:hover{background:var(--red-mid);}
 .login-error{font-size:13px;color:var(--red);margin-bottom:12px;display:none;}
 .login-success{font-size:13px;color:var(--success);margin-bottom:12px;display:none;}
@@ -53,7 +80,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .txn-client{font-size:15px;font-weight:600;}
 .txn-address{font-size:13px;color:var(--muted);margin-top:2px;}
 .txn-badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px;flex-shrink:0;}
-.badge-buyer{background:#e8f0fe;color:#1a56db;}
+.badge-buyer{background:#ddeef9;color:var(--blue-dark);}
 .badge-seller{background:#fef3c7;color:#92400e;}
 .badge-dual{background:#f3e8ff;color:#6b21a8;}
 .txn-progress-wrap{background:var(--bg);border-radius:99px;height:5px;margin-bottom:6px;overflow:hidden;}
@@ -110,7 +137,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .step-name.current{font-weight:600;color:var(--warning);}
 .step-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;align-items:center;}
 .step-date-badge{font-size:11px;color:var(--success);font-family:"DM Mono",monospace;}
-.step-note-text{font-size:12px;color:var(--info);background:var(--info-light);padding:2px 8px;border-radius:4px;}
+.step-note-text{font-size:12px;color:var(--blue-dark);background:#eef4fb;padding:2px 8px;border-radius:4px;}
 .step-note-input{font-size:12px;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-family:"DM Sans",sans-serif;background:var(--white);color:var(--dark);width:100%;margin-top:4px;}
 .step-note-input:focus{outline:none;border-color:var(--red);}
 .step-add-note{font-size:11px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;padding:0;text-decoration:underline;margin-top:2px;}
@@ -121,10 +148,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .note-textarea:focus{outline:none;border-color:var(--red);}
 .ext-link-row{display:flex;gap:8px;flex-wrap:wrap;}
 .ext-link-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:var(--radius);font-size:12px;font-weight:500;text-decoration:none;border:none;cursor:pointer;}
-.dotloop-lnk{background:#1a56db;color:white;}
-.dotloop-lnk:hover{background:#1447c0;}
-.fub-lnk{background:#16a34a;color:white;}
-.fub-lnk:hover{background:#15803d;}
+.dotloop-lnk{background:var(--blue-dark);color:white;}
+.dotloop-lnk:hover{background:var(--blue-darker);}
+.fub-lnk{background:var(--blue);color:white;}
+.fub-lnk:hover{background:var(--blue-dark);}
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:12px;font-weight:500;color:var(--mid);margin-bottom:6px;}
 .form-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:"DM Sans",sans-serif;font-size:14px;background:var(--white);color:var(--dark);}
@@ -221,8 +248,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-step-name{font-size:14px;}
 .client-step-name.done{color:var(--muted);text-decoration:line-through;}
 .client-step-name.current{font-weight:600;color:var(--warning);}
-.client-step-note{font-size:12px;color:var(--info);margin-top:3px;}
-.client-note-box{background:var(--info-light);border:1px solid #bae6fd;border-radius:var(--radius);padding:12px 14px;margin-top:12px;font-size:14px;color:var(--mid);}
+.client-step-note{font-size:12px;color:var(--blue-dark);margin-top:3px;}
+.client-note-box{background:#eef4fb;border:1px solid var(--sky);border-radius:var(--radius);padding:12px 14px;margin-top:12px;font-size:14px;color:var(--mid);}
 .source-badge{display:inline-flex;align-items:center;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:2px 10px;color:var(--muted);margin-top:4px;}
 .disclaimer{padding:16px 0 8px;text-align:center;font-size:11px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);margin-top:16px;}
 .profile-avatar-wrap{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
@@ -250,7 +277,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .change-pin-link{font-size:12px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;padding:0;text-decoration:underline;}
 .contingency-textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-family:"DM Sans",sans-serif;font-size:13px;resize:none;background:var(--white);color:var(--dark);}
 .contingency-textarea:focus{outline:none;border-color:var(--red);}
-.admin-view-badge{font-size:11px;background:#fff3cd;color:#856404;padding:4px 12px;border-radius:99px;font-weight:500;}
+.admin-view-badge{font-size:11px;background:#ddeef9;color:var(--blue-dark);padding:4px 12px;border-radius:99px;font-weight:500;}
 </style>
 </head>
 <body>
@@ -866,7 +893,7 @@ const firstUndone=steps.findIndex(s=>!s.done);
 if(firstUndone>=0)document.getElementById("client-next-name").textContent=steps[firstUndone].name;
 else document.getElementById("client-next-step").innerHTML=`<div style="font-size:16px;">🎉</div><div><div class="next-step-label">Status</div><div class="next-step-name">All steps complete — congratulations!</div></div>`;
 document.getElementById("client-steps").innerHTML=steps.map((s,i)=>{const isCur=!s.done&&i===firstUndone;return`<div class="client-step ${isCur?"cs-current":""}"><div class="client-step-dot ${s.done?"done":isCur?"current":""}"></div><div class="client-step-body"><div class="client-step-name ${s.done?"done":isCur?"current":""}">${s.name}</div>${s.note?`<div class="client-step-note">${s.note}</div>`:""}</div></div>`;}).join("");
-if(t.note){const nb=document.getElementById("client-note-box");nb.style.display="block";nb.innerHTML=`<div style="font-size:11px;font-weight:600;color:#0369a1;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Message from your agent</div>${t.note}`;}
+if(t.note){const nb=document.getElementById("client-note-box");nb.style.display="block";nb.innerHTML=`<div style="font-size:11px;font-weight:600;color:var(--blue-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Message from your agent</div>${t.note}`;}
 
 // LEFT COL: agent + title + lender
 let ap={};try{const pd=await getDoc(doc(db,"agents",t.agent));if(pd.exists())ap=pd.data();}catch(e){}
