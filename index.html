@@ -36,6 +36,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+.main{position:relative;}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;flex-direction:column;}
 #screen-login,#screen-setup{align-items:center;justify-content:center;padding:2rem;background:var(--bg);}
@@ -73,7 +74,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .btn-outline:hover{border-color:var(--dark);}
 .btn-sm{padding:6px 12px;font-size:12px;}
 .card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
-.card-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+.card-label{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
 .txn-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
 .txn-card:hover{border-color:#ccc;box-shadow:0 2px 8px rgba(0,0,0,.06);}
 .txn-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
@@ -209,7 +210,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-header{background:var(--dark);padding:20px;}
 .client-header-top{display:flex;align-items:center;margin-bottom:16px;}
 .client-logo{display:flex;align-items:center;gap:8px;}
-.client-logo img{height:26px;width:auto;filter:brightness(0) invert(1);}
+.client-logo img{height:30px;width:auto;background:white;padding:5px 8px;border-radius:6px;}
 .client-logo-text{font-size:13px;font-weight:500;color:white;}
 .client-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .client-property{font-size:20px;font-weight:600;color:white;margin-bottom:6px;}
@@ -221,7 +222,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-closing-pill-date{font-size:15px;font-weight:600;color:white;}
 .client-closing-pill-time{font-size:12px;color:rgba(255,255,255,.7);margin-top:2px;}
 .client-body{padding:20px;max-width:1040px;margin:0 auto;}
-.client-progress-card{background:var(--bg);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;}
+.client-progress-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;}
 .client-progress-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
 .client-progress-bar{background:var(--border);border-radius:99px;height:8px;margin-bottom:6px;overflow:hidden;}
 .client-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red-dark),var(--red));}
@@ -231,9 +232,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .next-step-name{font-size:14px;font-weight:500;color:var(--dark);margin-top:1px;}
 .client-3col{display:grid;grid-template-columns:240px 1fr 260px;gap:14px;align-items:start;margin-bottom:16px;}
 @media(max-width:760px){.client-3col{grid-template-columns:1fr;gap:10px;}}
-.client-info-card{background:var(--bg);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;}
+.client-info-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;}
 .client-info-card:last-child{margin-bottom:0;}
-.client-info-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.client-info-label{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
 .client-info-row{margin-bottom:8px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .client-info-row:last-child{margin-bottom:0;}
 .client-info-key{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px;flex-shrink:0;}
@@ -260,7 +261,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-closing-big-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
 .client-closing-big-date{font-size:22px;font-weight:600;color:white;}
 .client-closing-big-time{font-size:13px;color:rgba(255,255,255,.6);margin-top:2px;}
-.client-agent-block{background:var(--bg);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;}
+.client-agent-block{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;}
 .client-agent-avatar{width:52px;height:52px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:white;overflow:hidden;margin-bottom:10px;}
 .client-agent-avatar img{width:100%;height:100%;object-fit:cover;}
 .client-agent-name{font-size:15px;font-weight:600;margin-bottom:4px;}
@@ -440,8 +441,21 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
           <div style="font-size:12px;color:var(--muted);margin-top:8px;">Share with your client. No login needed.</div>
         </div>
         <div class="card">
-          <div class="card-label">External links</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div class="card-label" style="margin-bottom:0;">External links</div>
+            <button class="copy-btn" onclick="openEditLinks()">Edit</button>
+          </div>
           <div class="ext-link-row" id="ext-links-row"></div>
+          <div id="edit-links-form" style="display:none;margin-top:12px;">
+            <label class="form-label" style="font-size:11px;">DotLoop link</label>
+            <input class="sidebar-input" type="url" id="edit-dotloop" placeholder="https://dotloop.com/..." style="margin-bottom:8px;margin-top:2px;">
+            <label class="form-label" style="font-size:11px;">Follow Up Boss link</label>
+            <input class="sidebar-input" type="url" id="edit-fub" placeholder="https://...followupboss.com/..." style="margin-bottom:10px;margin-top:2px;">
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-primary btn-sm" onclick="saveLinks()">Save links</button>
+              <button class="btn btn-outline btn-sm" onclick="document.getElementById('edit-links-form').style.display='none'">Cancel</button>
+            </div>
+          </div>
         </div>
         <div class="card">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
@@ -487,11 +501,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
             <input class="sidebar-input sidebar-input-sm" type="number" id="sb-insp-days" value="10" min="1" max="60" onchange="recalcDates()">
           </div>
           <div class="sidebar-section">
-            <div class="sidebar-label">Inspection begins <span class="auto-badge">auto</span></div>
+            <div class="sidebar-label">Inspection period begins <span class="auto-badge">auto</span></div>
             <input class="sidebar-input" type="date" id="sb-insp-begin" onchange="saveSidebar()">
           </div>
           <div class="sidebar-section">
-            <div class="sidebar-label">Inspection ends <span class="auto-badge">auto</span></div>
+            <div class="sidebar-label">Inspection period ends <span class="auto-badge">auto</span></div>
             <input class="sidebar-input" type="date" id="sb-insp-end" onchange="saveSidebar()">
           </div>
           <div class="sidebar-section">
@@ -508,7 +522,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
             <input class="sidebar-input" type="date" id="sb-hoa" onchange="saveSidebar()">
           </div>
           <div class="sidebar-section">
-            <div class="sidebar-label">Appraisal ordered due</div>
+            <div class="sidebar-label">Appraisal ordered by</div>
             <input class="sidebar-input sidebar-input-sm" type="number" id="sb-appraisal-days" value="10" min="1" max="60" onchange="recalcDates()">
             <input class="sidebar-input" type="date" id="sb-appraisal" onchange="saveSidebar()" style="margin-top:4px;">
           </div>
@@ -576,7 +590,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
       <div id="client-left-col"></div>
       <div>
         <div class="card"><div class="card-label">Your transaction steps</div><div id="client-steps"></div></div>
-        <div class="client-note-box" id="client-note-box" style="display:none;"></div>
       </div>
       <div id="client-right-col"></div>
     </div>
@@ -848,11 +861,8 @@ document.getElementById("agent-note-card").style.display=fromAdmin?"none":"block
 document.getElementById("detail-note").value=t.note||"";
 
 // External links
-const extRow=document.getElementById("ext-links-row");let extHtml="";
-if(t.dotloop)extHtml+=`<a class="ext-link-btn dotloop-lnk" href="${t.dotloop}" target="_blank">DotLoop →</a>`;
-if(t.fub)extHtml+=`<a class="ext-link-btn fub-lnk" href="${t.fub}" target="_blank">Follow Up Boss →</a>`;
-if(!extHtml)extHtml=`<span style="font-size:13px;color:var(--muted);">No external links added.</span>`;
-extRow.innerHTML=extHtml;
+renderExtLinks(t);
+document.getElementById("edit-links-form").style.display="none";
 
 const sd=t.sidebarData||{};
 document.getElementById("sb-closing").value=t.closing||"";
@@ -979,6 +989,33 @@ window.saveStepNote=async function(side,i){const input=document.getElementById(`
 window.toggleStep=async function(side,i){const t=liveTransactions.find(x=>x.id===currentTxnId);if(!t)return;const key=side+"Steps";const steps=[...(t[key]||[])];steps[i]={...steps[i],done:!steps[i].done,date:!steps[i].done?new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"}):""}; try{await updateDoc(doc(db,"transactions",currentTxnId),{[key]:steps});}catch(e){showToast("Error saving");}};
 window.saveNote=async function(){const note=document.getElementById("detail-note").value.trim();try{await updateDoc(doc(db,"transactions",currentTxnId),{note});showToast("Message saved");}catch(e){showToast("Error saving");}};
 window.copyLink=function(){navigator.clipboard.writeText(document.getElementById("detail-link").textContent).then(()=>showToast("Link copied")).catch(()=>showToast("Copy failed"));};
+
+window.openEditLinks=function(){
+  const t=liveTransactions.find(x=>x.id===currentTxnId);if(!t)return;
+  document.getElementById("edit-dotloop").value=t.dotloop||"";
+  document.getElementById("edit-fub").value=t.fub||"";
+  const f=document.getElementById("edit-links-form");
+  f.style.display=f.style.display==="none"?"block":"none";
+};
+window.saveLinks=async function(){
+  const dotloop=document.getElementById("edit-dotloop").value.trim();
+  const fub=document.getElementById("edit-fub").value.trim();
+  try{
+    await updateDoc(doc(db,"transactions",currentTxnId),{dotloop,fub});
+    document.getElementById("edit-links-form").style.display="none";
+    showToast("Links saved");
+    // Refresh the displayed links
+    const t=liveTransactions.find(x=>x.id===currentTxnId);
+    if(t){t.dotloop=dotloop;t.fub=fub;renderExtLinks(t);}
+  }catch(e){showToast("Error saving links");}
+};
+function renderExtLinks(t){
+  const extRow=document.getElementById("ext-links-row");let extHtml="";
+  if(t.dotloop)extHtml+=`<a class="ext-link-btn dotloop-lnk" href="${t.dotloop}" target="_blank">DotLoop →</a>`;
+  if(t.fub)extHtml+=`<a class="ext-link-btn fub-lnk" href="${t.fub}" target="_blank">Follow Up Boss →</a>`;
+  if(!extHtml)extHtml=`<span style="font-size:13px;color:var(--muted);">No links yet. Tap Edit to add DotLoop or Follow Up Boss.</span>`;
+  extRow.innerHTML=extHtml;
+}
 window.backToDash=function(){currentTxnId=null;if(currentUser.isAdmin)show("screen-admin");else show("screen-agent");};
 window.openNewTxn=function(){newTxnType="buyer";["buyer","seller","dual"].forEach(t=>document.getElementById("type-"+t).classList.toggle("selected",t==="buyer"));["new-client","new-address","new-city","new-state","new-zip","new-dotloop","new-fub","new-source"].forEach(id=>document.getElementById(id).value="");document.getElementById("new-closing").value="";document.getElementById("new-closing-time").value="";document.getElementById("modal-new-txn").classList.add("open");};
 window.selectType=function(t){newTxnType=t;["buyer","seller","dual"].forEach(x=>document.getElementById("type-"+x).classList.toggle("selected",x===t));};
@@ -1010,18 +1047,60 @@ const firstUndone=steps.findIndex(s=>!s.done);
 if(firstUndone>=0)document.getElementById("client-next-name").textContent=steps[firstUndone].name;
 else document.getElementById("client-next-step").innerHTML=`<div style="font-size:16px;">🎉</div><div><div class="next-step-label">Status</div><div class="next-step-name">All steps complete — congratulations!</div></div>`;
 document.getElementById("client-steps").innerHTML=steps.map((s,i)=>{const isCur=!s.done&&i===firstUndone;return`<div class="client-step ${isCur?"cs-current":""}"><div class="client-step-dot ${s.done?"done":isCur?"current":""}"></div><div class="client-step-body"><div class="client-step-name ${s.done?"done":isCur?"current":""}">${s.name}</div>${s.note?`<div class="client-step-note">${s.note}</div>`:""}</div></div>`;}).join("");
-if(t.note){const nb=document.getElementById("client-note-box");nb.style.display="block";nb.innerHTML=`<div style="font-size:11px;font-weight:600;color:var(--blue-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Message from your agent</div>${t.note}`;}
-
-// LEFT COL: agent + title + lender
+// LEFT COL: video + agent + title (with map) + lender + notes
 let ap={};try{const pd=await getDoc(doc(db,"agents",t.agent));if(pd.exists())ap=pd.data();}catch(e){}
 const n=ini(t.agent);const avHtml=ap.photo?`<img src="${ap.photo}" onerror="this.outerHTML='${n}'" style="width:100%;height:100%;object-fit:cover;">`:n;
-let leftHtml=`<div class="client-agent-block"><div class="client-agent-avatar">${avHtml}</div><div class="client-agent-name">${t.agent}</div><div class="client-agent-contact">${ap.phone?`<a href="tel:${ap.phone}">${ap.phone}</a>`:""}${ap.email?`<a href="mailto:${ap.email}">${ap.email}</a>`:""}</div></div>`;
-if(sd.titleName)leftHtml+=`<div class="client-info-card"><div class="client-info-label">Title company</div>${sd.titleName?`<div class="client-info-row"><div class="client-info-val">${sd.titleName}</div></div>`:""}${sd.titleAddr?`<div class="client-info-row"><div class="client-info-val" style="font-size:12px;color:var(--muted);">${sd.titleAddr}</div></div>`:""}${sd.titleCity?`<div class="client-info-row"><div class="client-info-val" style="font-size:12px;color:var(--muted);">${sd.titleCity}</div></div>`:""}${sd.titlePhone?`<div class="client-info-row"><div class="client-info-key">Phone</div><div class="client-info-val">${sd.titlePhone}</div></div>`:""}</div>`;
-if(sd.lenderAgent&&t.type!=="seller")leftHtml+=`<div class="client-info-card"><div class="client-info-label">Lender</div>${sd.lenderAgent?`<div class="client-info-row"><div class="client-info-val">${sd.lenderAgent}</div></div>`:""}${sd.lenderCompany?`<div class="client-info-row"><div class="client-info-val" style="font-size:12px;color:var(--muted);">${sd.lenderCompany}</div></div>`:""}${sd.lenderPhone?`<div class="client-info-row"><div class="client-info-key">Phone</div><div class="client-info-val">${sd.lenderPhone}</div></div>`:""}${sd.lenderEmail?`<div class="client-info-row"><div class="client-info-key">Email</div><div class="client-info-val" style="font-size:12px;">${sd.lenderEmail}</div></div>`:""}</div>`;
+let leftHtml="";
+
+// 1. VIDEO (above agent box)
+if(ap.video){
+  let embedUrl=ap.video;
+  try{
+    if(embedUrl.includes("youtube.com/watch")){const vid=new URLSearchParams(new URL(embedUrl).search).get("v");if(vid)embedUrl="https://www.youtube.com/embed/"+vid+"?rel=0";}
+    else if(embedUrl.includes("youtu.be/")){const vid=embedUrl.split("youtu.be/")[1].split("?")[0];embedUrl="https://www.youtube.com/embed/"+vid+"?rel=0";}
+    else if(embedUrl.includes("loom.com/share/")){const vid=embedUrl.split("loom.com/share/")[1].split("?")[0];embedUrl="https://www.loom.com/embed/"+vid;}
+  }catch(e){}
+  leftHtml+=`<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius-lg);margin-bottom:12px;"><iframe src="${embedUrl}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:var(--radius-lg);" allowfullscreen></iframe></div>`;
+}
+
+// 2. AGENT BOX with "Your Agent" tag
+leftHtml+=`<div class="client-agent-block"><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Your Agent</div><div class="client-agent-avatar">${avHtml}</div><div class="client-agent-name">${t.agent}</div><div class="client-agent-contact">${ap.phone?`<a href="tel:${ap.phone}" class="contact-link">${ap.phone}</a>`:""}${ap.email?`<a href="mailto:${ap.email}" class="contact-link">${ap.email}</a>`:""}</div></div>`;
+
+// 3. TITLE COMPANY with map embed
+if(sd.titleName){
+  leftHtml+=`<div class="client-info-card"><div class="client-info-label">Title company</div>`;
+  leftHtml+=`<div style="font-size:13px;font-weight:500;color:var(--dark);margin-bottom:2px;">${sd.titleName}</div>`;
+  if(sd.titleAddr)leftHtml+=`<div style="font-size:12px;color:var(--muted);">${sd.titleAddr}</div>`;
+  if(sd.titleCity)leftHtml+=`<div style="font-size:12px;color:var(--muted);">${sd.titleCity}</div>`;
+  if(sd.titlePhone)leftHtml+=`<div style="margin-top:6px;"><a href="tel:${sd.titlePhone}" class="contact-link" style="font-size:13px;font-weight:500;">${sd.titlePhone}</a></div>`;
+  // Map embed using title address
+  const mapAddr=[sd.titleName,sd.titleAddr,sd.titleCity].filter(Boolean).join(", ");
+  if(mapAddr){
+    const mapQuery=encodeURIComponent(mapAddr);
+    leftHtml+=`<div style="margin-top:10px;border-radius:8px;overflow:hidden;"><iframe width="100%" height="140" style="border:0;display:block;" loading="lazy" src="https://maps.google.com/maps?q=${mapQuery}&output=embed"></iframe></div>`;
+  }
+  leftHtml+=`</div>`;
+}
+
+// 4. LENDER (buyer/dual only)
+if(sd.lenderAgent&&t.type!=="seller"){
+  leftHtml+=`<div class="client-info-card"><div class="client-info-label">Lender</div>`;
+  leftHtml+=`<div style="font-size:13px;font-weight:500;color:var(--dark);margin-bottom:2px;">${sd.lenderAgent}</div>`;
+  if(sd.lenderCompany)leftHtml+=`<div style="font-size:12px;color:var(--muted);">${sd.lenderCompany}</div>`;
+  if(sd.lenderPhone)leftHtml+=`<div style="margin-top:6px;"><a href="tel:${sd.lenderPhone}" class="contact-link" style="font-size:13px;font-weight:500;">${sd.lenderPhone}</a></div>`;
+  if(sd.lenderEmail)leftHtml+=`<div style="margin-top:2px;"><a href="mailto:${sd.lenderEmail}" class="contact-link" style="font-size:12px;">${sd.lenderEmail}</a></div>`;
+  leftHtml+=`</div>`;
+}
+
+// 5. AGENT MESSAGE / NOTE (under lender box, on left)
+if(t.note){
+  leftHtml+=`<div class="client-note-box" style="display:block;"><div style="font-size:11px;font-weight:600;color:var(--blue-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Message from your agent</div>${t.note}</div>`;
+}
+
 document.getElementById("client-left-col").innerHTML=leftHtml;
 
 // RIGHT COL: deadlines with color coding
-const deadlines=[{k:"Acceptance date",v:sd.acceptance,noCountdown:true},{k:"Earnest money due",v:sd.earnest},{k:"Inspection begins",v:sd.inspBegin},{k:"Inspection ends",v:sd.inspEnd},{k:"TRR due",v:sd.trrDue},{k:"TRR negotiation ends",v:sd.trrNegEnd},{k:"HOA CC&Rs due",v:sd.hoaDue},{k:"Appraisal ordered due",v:sd.appraisalDue}];
+const deadlines=[{k:"Acceptance date",v:sd.acceptance,noCountdown:true},{k:"Earnest money due",v:sd.earnest},{k:"Inspection period begins",v:sd.inspBegin},{k:"Inspection period ends",v:sd.inspEnd},{k:"TRR due",v:sd.trrDue},{k:"TRR negotiation ends",v:sd.trrNegEnd},{k:"HOA CC&Rs due",v:sd.hoaDue},{k:"Appraisal ordered by",v:sd.appraisalDue}];
 const dlRows=deadlines.filter(d=>d.v).map(d=>{const dc=d.noCountdown?"dl-past":dlClass(d.v);const dv=d.noCountdown?"dv-past":dvClass(d.v);const cs=d.noCountdown?"":countdownStr(d.v);return`<div class="client-deadline-row ${dc}"><div class="client-deadline-key">${d.k}</div><div class="client-deadline-val ${dv}">${fmtDateSh(d.v)}${cs?`<span class="client-countdown">${cs}</span>`:""}</div></div>`;}).join("");
 // Closing at bottom, bold
 const closingBox=t.closing?`<div class="client-closing-big"><div class="client-closing-big-label">Closing date</div><div class="client-closing-big-date">${fmtDate(t.closing)}</div>${sd.closingTime?`<div class="client-closing-big-time">${fmtTime(sd.closingTime)}</div>`:""}</div>`:"";
