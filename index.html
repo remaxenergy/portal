@@ -136,7 +136,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .override-badge{font-size:9px;font-weight:500;background:var(--warning-light);color:var(--warning);padding:1px 5px;border-radius:3px;}
 .sidebar-value{font-size:13px;color:var(--dark);font-weight:500;}
 .sidebar-value.auto{color:var(--success);font-size:12px;}
-.trd-note{font-size:10px;color:var(--muted);font-style:italic;margin-top:2px;}
+.trd-note{font-size:11px;color:var(--mid);margin-top:4px;line-height:1.4;}
 .countdown-tag{font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;margin-left:4px;}
 .countdown-green{background:var(--success-light);color:var(--success);}
 .countdown-orange{background:var(--warning-light);color:var(--warning);}
@@ -725,7 +725,9 @@ function isBusinessDay(ds){
   return true;
 }
 
-function addDays(ds,n){if(!ds)return null;const d=new Date(ds+"T12:00:00");d.setDate(d.getDate()+n);return d.toISOString().split("T")[0];}
+function pad2(x){return String(x).padStart(2,"0");}
+function toYMD(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
+function addDays(ds,n){if(!ds)return null;const d=new Date(ds+"T12:00:00");d.setDate(d.getDate()+n);return toYMD(d);}
 
 function addCalendarDaysRollToBusinessDay(ds,n){
   // Add n calendar days, then roll forward to next business day if lands on weekend/holiday
@@ -736,7 +738,7 @@ function addCalendarDaysRollToBusinessDay(ds,n){
   while(d.getDay()===0||d.getDay()===6||isFederalHoliday(d)){
     d.setDate(d.getDate()+1);
   }
-  return d.toISOString().split("T")[0];
+  return toYMD(d);
 }
 function fmtDate(d){if(!d)return"—";const dt=new Date(d+"T12:00:00");return dt.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});}
 function fmtDateSh(d){if(!d)return"—";const dt=new Date(d+"T12:00:00");return dt.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
@@ -940,7 +942,8 @@ window.recalcDates=function(){
     if(document.getElementById("sb-trd")) document.getElementById("sb-trd").style.borderColor="var(--warning)";
   } else if(acceptance){
     trdBadge.textContent="auto";trdBadge.className="auto-badge";
-    trdNote.textContent="Auto: acceptance + 3 days"+( trdAuto?(" = "+fmtDateSh(trdAuto)):"")+(trdAuto!==addDays(acceptance,3)?" (rolled past weekend/holiday)":"");
+    const rolled=(trdAuto!==addDays(acceptance,3));
+    trdNote.innerHTML="<strong style='color:var(--dark);'>"+fmtDateSh(trdAuto)+"</strong> — auto (acceptance + 3 days"+(rolled?", rolled past weekend/holiday":"")+"). Leave blank to use this, or enter a date to override.";
     if(document.getElementById("sb-trd")) document.getElementById("sb-trd").style.borderColor="";
   } else {
     trdBadge.textContent="auto";trdBadge.className="auto-badge";
@@ -966,11 +969,6 @@ window.recalcDates=function(){
     if(el&&!el.value&&val) el.value=val;
   });
 
-  // Update TRD display field to show auto-calculated value
-  const trdField=document.getElementById("sb-trd");
-  if(trdField&&!trdOverride&&trdAuto){
-    trdField.placeholder=fmtDateSh(trdAuto)+" (auto)";
-  }
 };
 
 window.saveSidebar=async function(){if(!currentTxnId)return;
