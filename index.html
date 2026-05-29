@@ -67,12 +67,12 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .section-title{font-size:18px;font-weight:600;}
 .section-sub{font-size:13px;color:var(--muted);margin-top:2px;}
 .btn{padding:9px 16px;border-radius:var(--radius);font-family:"DM Sans",sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;}
-.btn-primary{background:var(--red);color:white;}
-.btn-primary:hover{background:var(--red-mid);}
+.btn-primary{background:var(--red);color:white;font-weight:600;}
+.btn-primary:hover{background:var(--red-dark);}
 .btn-outline{background:transparent;color:var(--dark);border:1.5px solid var(--border);}
 .btn-outline:hover{border-color:var(--dark);}
 .btn-sm{padding:6px 12px;font-size:12px;}
-.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:12px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
 .card-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
 .txn-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
 .txn-card:hover{border-color:#ccc;box-shadow:0 2px 8px rgba(0,0,0,.06);}
@@ -84,7 +84,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .badge-seller{background:#fef3c7;color:#92400e;}
 .badge-dual{background:#f3e8ff;color:#6b21a8;}
 .txn-progress-wrap{background:var(--bg);border-radius:99px;height:5px;margin-bottom:6px;overflow:hidden;}
-.txn-progress-fill{height:100%;border-radius:99px;background:var(--red);}
+.txn-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red-dark),var(--red));}
 .txn-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);}
 .detail-3col{display:grid;grid-template-columns:260px 1fr 300px;gap:14px;align-items:start;}
 @media(max-width:860px){.detail-3col{grid-template-columns:1fr;}}
@@ -124,17 +124,18 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .sidebar-input-sm{width:80px;}
 .step-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 .step-item:last-child{border-bottom:none;}
-.step-item.step-current{background:rgba(26,122,74,.05);border-radius:8px;padding:10px 8px;margin:0 -8px;border-bottom:none;}
+.step-item.step-current{background:rgba(255,18,0,.04);border-radius:8px;padding:10px 8px;margin:0 -8px;border-bottom:none;border-left:3px solid var(--red);}
+.step-item.step-done-item{opacity:.75;}
 .step-item.step-current+.step-item{border-top:1px solid var(--border);}
 .step-cb{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;margin-top:2px;transition:all .15s;}
 .step-cb.checked{background:var(--success);border-color:var(--success);}
 .step-cb.checked::after{content:"✓";color:white;font-size:10px;font-weight:700;}
-.step-cb.current{border-color:var(--warning);background:var(--warning-light);}
+.step-cb.current{border-color:var(--red);background:rgba(255,18,0,.08);}
 .step-cb:not(.checked):not(.current):hover{border-color:var(--red);}
 .step-body{flex:1;}
 .step-name{font-size:14px;color:var(--dark);}
 .step-name.done{color:var(--muted);text-decoration:line-through;}
-.step-name.current{font-weight:600;color:var(--warning);}
+.step-name.current{font-weight:600;color:var(--red-dark);}
 .step-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;align-items:center;}
 .step-date-badge{font-size:11px;color:var(--success);font-family:"DM Mono",monospace;}
 .step-note-text{font-size:12px;color:var(--blue-dark);background:#eef4fb;padding:2px 8px;border-radius:4px;}
@@ -198,10 +199,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-progress-card{background:var(--bg);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;}
 .client-progress-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
 .client-progress-bar{background:var(--border);border-radius:99px;height:8px;margin-bottom:6px;overflow:hidden;}
-.client-progress-fill{height:100%;border-radius:99px;background:var(--red);}
+.client-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red-dark),var(--red));}
 .client-progress-text{font-size:13px;color:var(--muted);}
-.next-step-card{background:var(--warning-light);border:1px solid #fcd34d;border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-.next-step-label{font-size:11px;font-weight:600;color:var(--warning);text-transform:uppercase;letter-spacing:.05em;}
+.next-step-card{background:rgba(255,18,0,.04);border:1px solid rgba(255,18,0,.2);border-radius:var(--radius);padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--red);}
+.next-step-label{font-size:11px;font-weight:600;color:var(--red-dark);text-transform:uppercase;letter-spacing:.05em;}
 .next-step-name{font-size:14px;font-weight:500;color:var(--dark);margin-top:1px;}
 .client-3col{display:grid;grid-template-columns:240px 1fr 260px;gap:14px;align-items:start;margin-bottom:16px;}
 @media(max-width:760px){.client-3col{grid-template-columns:1fr;}}
@@ -219,13 +220,13 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-deadline-row:last-child{margin-bottom:0;}
 .client-deadline-row.dl-green{background:rgba(26,122,74,.07);}
 .client-deadline-row.dl-orange{background:rgba(180,83,9,.07);}
-.client-deadline-row.dl-red{background:rgba(185,28,28,.07);}
+.client-deadline-row.dl-red{background:rgba(170,17,32,.07);}
 .client-deadline-row.dl-past{opacity:.6;}
 .client-deadline-key{font-size:11px;color:var(--muted);flex:1;}
 .client-deadline-val{font-size:12px;font-weight:600;text-align:right;flex-shrink:0;}
 .client-deadline-val.dv-green{color:var(--success);}
-.client-deadline-val.dv-orange{color:var(--warning);}
-.client-deadline-val.dv-red{color:var(--danger);}
+.client-deadline-val.dv-orange{color:var(--warning);font-weight:600;}
+.client-deadline-val.dv-red{color:var(--red-dark);font-weight:700;}
 .client-deadline-val.dv-past{color:var(--muted);font-weight:400;}
 .client-countdown{font-size:10px;display:block;margin-top:1px;}
 .client-closing-big{background:var(--dark);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;text-align:center;}
@@ -239,15 +240,15 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-agent-contact a{display:block;font-size:12px;color:var(--red);text-decoration:none;margin-bottom:2px;}
 .client-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
 .client-step:last-child{border-bottom:none;}
-.client-step.cs-current{background:rgba(26,122,74,.05);border-radius:8px;padding:10px 8px;margin:0 -8px;}
+.client-step.cs-current{background:rgba(255,18,0,.04);border-radius:8px;padding:10px 8px;margin:0 -8px;border-left:3px solid var(--red);}
 .client-step-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
 .client-step-dot.done{background:var(--success);border-color:var(--success);}
 .client-step-dot.done::after{content:"✓";color:white;font-size:10px;font-weight:700;}
-.client-step-dot.current{border-color:var(--warning);background:var(--warning-light);}
+.client-step-dot.current{border-color:var(--red);background:rgba(255,18,0,.08);}
 .client-step-body{flex:1;}
 .client-step-name{font-size:14px;}
 .client-step-name.done{color:var(--muted);text-decoration:line-through;}
-.client-step-name.current{font-weight:600;color:var(--warning);}
+.client-step-name.current{font-weight:600;color:var(--red-dark);}
 .client-step-note{font-size:12px;color:var(--blue-dark);margin-top:3px;}
 .client-note-box{background:#eef4fb;border:1px solid var(--sky);border-radius:var(--radius);padding:12px 14px;margin-top:12px;font-size:14px;color:var(--mid);}
 .source-badge{display:inline-flex;align-items:center;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:2px 10px;color:var(--muted);margin-top:4px;}
@@ -292,6 +293,39 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
     <input class="pin-input" type="password" inputmode="numeric" maxlength="4" id="pin-input" placeholder="••••" autocomplete="off">
     <div class="login-error" id="login-error">Incorrect PIN. Try again.</div>
     <button class="login-btn" onclick="doLogin()">Sign in</button>
+    <div style="margin-top:20px;text-align:center;">
+      <button class="change-pin-link" onclick="document.getElementById('howto-modal').classList.add('open')" style="color:var(--muted);font-size:12px;">How does this work?</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOW-TO MODAL -->
+<div class="modal-overlay" id="howto-modal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">How to use the Transaction Portal</div>
+    <div style="font-size:13px;color:var(--mid);line-height:1.7;">
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600;color:var(--dark);margin-bottom:6px;">For agents</div>
+        <div>1. Select your name and enter your 4-digit PIN to sign in.</div>
+        <div>2. If this is your first time, your admin will send you a setup link to create your PIN.</div>
+        <div>3. Once in, tap <strong>+ New</strong> to create a transaction — enter the client name, address, and closing date.</div>
+        <div>4. Fill in contract dates on the right side — enter the acceptance date and most dates calculate automatically.</div>
+        <div>5. Check off steps as you complete them.</div>
+        <div>6. Copy the <strong>Client Link</strong> and text or email it to your client — they can see progress without logging in.</div>
+        <div>7. Leave a message for your client anytime in the message box.</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:600;color:var(--dark);margin-bottom:6px;">For clients</div>
+        <div>Your agent will send you a link. Open it on any device — no login required. You'll see your transaction progress, key deadlines, and any messages from your agent.</div>
+      </div>
+      <div style="margin-bottom:4px;">
+        <div style="font-weight:600;color:var(--dark);margin-bottom:6px;">Need help?</div>
+        <div>Contact your transaction coordinator or the RE/MAX Energy Real Estate office.</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="document.getElementById('howto-modal').classList.remove('open')">Got it</button>
+    </div>
   </div>
 </div>
 
@@ -678,12 +712,67 @@ async function loadProfiles(){const s=await getDocs(collection(db,"agents"));s.d
 
 function initLogin(){const sel=document.getElementById("login-select");AGENTS.forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;sel.appendChild(o);});document.getElementById("pin-input").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});}
 
-window.doLogin=async function(){const who=document.getElementById("login-select").value;const pin=document.getElementById("pin-input").value.trim();const err=document.getElementById("login-error");err.style.display="none";
-if(!who){err.textContent="Please select your name.";err.style.display="block";return;}
-if(!pin){err.textContent="Please enter your PIN.";err.style.display="block";return;}
-if(who==="admin"){if(pin!==ADMIN_PIN){err.style.display="block";return;}currentUser={name:"Admin",isAdmin:true};document.getElementById("pin-input").value="";show("screen-admin");loadAdminTxns();return;}
-try{const ad=await getDoc(doc(db,"agents",who));if(!ad.exists()||ad.data().pin!==pin){err.style.display="block";return;}agentProfiles[who]=ad.data();currentUser={name:who,isAdmin:false};document.getElementById("pin-input").value="";document.getElementById("nav-agent-name").textContent=who;show("screen-agent");loadAgentTxns(who);}
-catch(e){err.textContent="Connection error.";err.style.display="block";}};
+const loginAttempts={};
+const LOCKOUT_AFTER=5;
+const LOCKOUT_MINS=5;
+
+window.doLogin=async function(){
+  const who=document.getElementById("login-select").value;
+  const pin=document.getElementById("pin-input").value.trim();
+  const err=document.getElementById("login-error");
+  err.style.display="none";
+  if(!who){err.textContent="Please select your name.";err.style.display="block";return;}
+  if(!pin){err.textContent="Please enter your PIN.";err.style.display="block";return;}
+
+  // Check lockout
+  const key=who;
+  const now=Date.now();
+  if(loginAttempts[key]){
+    const {count,lockedUntil}=loginAttempts[key];
+    if(lockedUntil&&now<lockedUntil){
+      const mins=Math.ceil((lockedUntil-now)/60000);
+      err.textContent=`Too many attempts. Try again in ${mins} minute${mins>1?"s":""}.`;
+      err.style.display="block";
+      document.getElementById("pin-input").value="";
+      return;
+    }
+  }
+
+  if(who==="admin"){
+    if(pin!==ADMIN_PIN){
+      loginAttempts[key]={count:(loginAttempts[key]?.count||0)+1,lockedUntil:null};
+      if(loginAttempts[key].count>=LOCKOUT_AFTER){loginAttempts[key].lockedUntil=now+LOCKOUT_MINS*60000;loginAttempts[key].count=0;}
+      err.style.display="block";
+      document.getElementById("pin-input").value="";
+      return;
+    }
+    loginAttempts[key]=null;
+    currentUser={name:"Admin",isAdmin:true};
+    document.getElementById("pin-input").value="";
+    show("screen-admin");loadAdminTxns();return;
+  }
+
+  try{
+    const ad=await getDoc(doc(db,"agents",who));
+    if(!ad.exists()||ad.data().pin!==pin){
+      loginAttempts[key]={count:(loginAttempts[key]?.count||0)+1,lockedUntil:null};
+      if(loginAttempts[key].count>=LOCKOUT_AFTER){loginAttempts[key].lockedUntil=now+LOCKOUT_MINS*60000;loginAttempts[key].count=0;}
+      const remaining=LOCKOUT_AFTER-(loginAttempts[key]?.count||0);
+      err.textContent=remaining<=2&&remaining>0?`Incorrect PIN. ${remaining} attempt${remaining>1?"s":""} remaining before lockout.`:"Incorrect PIN. Try again.";
+      err.style.display="block";
+      document.getElementById("pin-input").value="";
+      return;
+    }
+    loginAttempts[key]=null;
+    agentProfiles[who]=ad.data();
+    currentUser={name:who,isAdmin:false};
+    document.getElementById("pin-input").value="";
+    document.getElementById("nav-agent-name").textContent=who;
+    show("screen-agent");
+    loadAgentTxns(who);
+  }
+  catch(e){err.textContent="Connection error. Try again.";err.style.display="block";}
+};
 
 window.doLogout=function(){if(unsubscribe){unsubscribe();unsubscribe=null;}currentUser=null;currentTxnId=null;liveTransactions=[];document.getElementById("login-select").value="";document.getElementById("pin-input").value="";document.getElementById("login-error").style.display="none";show("screen-login");};
 
