@@ -174,7 +174,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .step-name.current{font-weight:600;color:var(--red-dark);}
 .step-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;align-items:center;}
 .step-date-badge{font-size:11px;color:var(--success);font-family:"DM Mono",monospace;}
-.step-note-text{font-size:12px;color:var(--blue-dark);background:#eef4fb;padding:2px 8px;border-radius:4px;}
+.step-note-text{font-size:12px;color:var(--mid);background:#f3efe6;padding:2px 8px;border-radius:4px;}
 .step-note-input{font-size:12px;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-family:"DM Sans",sans-serif;background:var(--white);color:var(--dark);width:100%;margin-top:4px;}
 .step-note-input:focus{outline:none;border-color:var(--red);}
 .step-add-note{font-size:11px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;padding:0;text-decoration:underline;margin-top:2px;}
@@ -289,8 +289,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min
 .client-step-name{font-size:14px;}
 .client-step-name.done{color:var(--muted);text-decoration:line-through;}
 .client-step-name.current{font-weight:600;color:var(--red-dark);}
-.client-step-note{font-size:12px;color:var(--blue-dark);margin-top:3px;}
-.client-note-box{background:#eef4fb;border:1px solid var(--sky);border-radius:var(--radius);padding:12px 14px;margin-top:12px;font-size:14px;color:var(--mid);}
+.client-step-note{font-size:12px;color:var(--mid);margin-top:3px;}
+.client-note-box{background:#faf7f0;border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-top:12px;font-size:14px;color:var(--mid);}
 .source-badge{display:inline-flex;align-items:center;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:2px 10px;color:var(--muted);margin-top:4px;}
 .disclaimer{padding:16px 0 8px;text-align:center;font-size:11px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);margin-top:16px;}
 .profile-avatar-wrap{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
@@ -927,7 +927,7 @@ currentTxnId=id;
 document.getElementById("admin-view-indicator").style.display=fromAdmin?"inline-block":"none";
 document.getElementById("nav-detail-name").textContent=currentUser.name;
 document.getElementById("detail-client").textContent=t.client;
-document.getElementById("detail-address").textContent=t.address;
+document.getElementById("detail-address").innerHTML=t.address?`<a href="https://maps.google.com/?q=${encodeURIComponent(t.address)}" target="_blank" rel="noopener" class="contact-link">${t.address}</a>`:"";
 const badge=document.getElementById("detail-badge");badge.textContent=t.type==="buyer"?"Buyer":t.type==="seller"?"Seller":"Both sides";badge.className="txn-badge "+(t.type==="buyer"?"badge-buyer":t.type==="seller"?"badge-seller":"badge-dual");
 document.getElementById("detail-link").textContent=BASE_URL+"?client="+id;
 document.getElementById("sb-lender-card").style.display=t.type==="seller"?"none":"block";
@@ -1311,7 +1311,7 @@ window.copySetupLink=function(link){navigator.clipboard.writeText(link).then(()=
 async function renderClientView(id){show("screen-loading");try{const snap=await getDoc(doc(db,"transactions",id));if(!snap.exists()){document.body.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;flex-direction:column;gap:12px;"><div style="font-size:48px;">🏠</div><div>Transaction not found.</div></div>`;return;}
 const t={id:snap.id,...snap.data()};const sd=t.sidebarData||{};
 document.getElementById("client-property").textContent=t.client;
-document.getElementById("client-address").textContent=t.address;
+document.getElementById("client-address").innerHTML=t.address?`<a href="https://maps.google.com/?q=${encodeURIComponent(t.address)}" target="_blank" rel="noopener" class="contact-link">${t.address}</a>`:"";
 const cb=document.getElementById("client-badge");cb.textContent=t.type==="buyer"?"Buyer":t.type==="seller"?"Seller":"Both sides";
 document.getElementById("client-closing-date").textContent=fmtDate(t.closing);
 
@@ -1354,8 +1354,8 @@ leftHtml+=`<div class="client-agent-block">
 if(sd.titleName){
   leftHtml+=`<div class="client-info-card"><div class="client-info-label">Title company</div>`;
   leftHtml+=`<div style="font-size:13px;font-weight:500;color:var(--dark);margin-bottom:2px;">${sd.titleName}</div>`;
-  if(sd.titleAddr)leftHtml+=`<div style="font-size:12px;color:var(--muted);">${sd.titleAddr}</div>`;
-  if(sd.titleCity)leftHtml+=`<div style="font-size:12px;color:var(--muted);">${sd.titleCity}</div>`;
+  const titleMapsQ=encodeURIComponent([sd.titleName,sd.titleAddr,sd.titleCity].filter(Boolean).join(", "));
+  if(sd.titleAddr||sd.titleCity)leftHtml+=`<a href="https://maps.google.com/?q=${titleMapsQ}" target="_blank" rel="noopener" class="contact-link" style="display:block;font-size:12px;">${[sd.titleAddr,sd.titleCity].filter(Boolean).join("<br>")}</a>`;
   if(sd.titlePhone)leftHtml+=`<div style="margin-top:6px;"><a href="tel:${sd.titlePhone}" class="contact-link" style="font-size:13px;font-weight:500;">${sd.titlePhone}</a></div>`;
   // Map embed using title address
   const mapAddr=[sd.titleName,sd.titleAddr,sd.titleCity].filter(Boolean).join(", ");
